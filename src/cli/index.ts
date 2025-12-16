@@ -27,6 +27,266 @@ function getDbPath(): string {
 }
 const dbPath = getDbPath();
 
+// Database migrations (same as main app)
+const MIGRATIONS = [
+  `
+  -- Core theme storage
+  CREATE TABLE IF NOT EXISTS themes (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    description TEXT,
+    author TEXT,
+    source_url TEXT,
+    source_format TEXT,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    is_favorite INTEGER DEFAULT 0,
+    is_builtin INTEGER DEFAULT 0,
+    UNIQUE(name, author)
+  );
+
+  -- Theme color data (normalized for flexibility)
+  CREATE TABLE IF NOT EXISTS theme_colors (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    theme_id TEXT NOT NULL REFERENCES themes(id) ON DELETE CASCADE,
+    color_key TEXT NOT NULL,
+    hex_value TEXT NOT NULL,
+    UNIQUE(theme_id, color_key)
+  );
+
+  -- Theme metadata (font, cursor, etc.)
+  CREATE TABLE IF NOT EXISTS theme_settings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    theme_id TEXT NOT NULL REFERENCES themes(id) ON DELETE CASCADE,
+    setting_key TEXT NOT NULL,
+    setting_value TEXT NOT NULL,
+    UNIQUE(theme_id, setting_key)
+  );
+
+  -- User-defined categories/tags
+  CREATE TABLE IF NOT EXISTS tags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL,
+    color TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS theme_tags (
+    theme_id TEXT NOT NULL REFERENCES themes(id) ON DELETE CASCADE,
+    tag_id INTEGER NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
+    PRIMARY KEY (theme_id, tag_id)
+  );
+
+  -- Export history
+  CREATE TABLE IF NOT EXISTS export_history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    theme_id TEXT NOT NULL REFERENCES themes(id) ON DELETE CASCADE,
+    format TEXT NOT NULL,
+    export_path TEXT NOT NULL,
+    exported_at INTEGER NOT NULL
+  );
+
+  -- Indexes
+  CREATE INDEX IF NOT EXISTS idx_themes_favorite ON themes(is_favorite);
+  CREATE INDEX IF NOT EXISTS idx_themes_updated ON themes(updated_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_theme_colors_theme ON theme_colors(theme_id);
+  `,
+];
+
+// Helper to strip JSON comments (JSONC support) while respecting strings
+function stripJsonComments(content: string): string {
+  let result = '';
+  let i = 0;
+  let inString = false;
+  let escaped = false;
+
+  while (i < content.length) {
+    const char = content[i];
+    const nextChar = content[i + 1];
+
+    if (inString) {
+      result += char;
+      if (escaped) {
+        escaped = false;
+      } else if (char === '\\') {
+        escaped = true;
+      } else if (char === '"') {
+        inString = false;
+      }
+      i++;
+    } else if (char === '"') {
+      inString = true;
+      result += char;
+      i++;
+    } else if (char === '/' && nextChar === '/') {
+      // Single-line comment - skip until end of line
+      while (i < content.length && content[i] !== '\n') {
+        i++;
+      }
+    } else if (char === '/' && nextChar === '*') {
+      // Multi-line comment - skip until */
+      i += 2;
+      while (i < content.length - 1 && !(content[i] === '*' && content[i + 1] === '/')) {
+        i++;
+      }
+      i += 2; // Skip the closing */
+    } else {
+      result += char;
+      i++;
+    }
+  }
+
+  // Remove trailing commas before } or ]
+  return result.replace(/,(\s*[}\]])/g, '$1');
+}
+
+// Helper to generate UUID
+function generateUUID(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+// Helper to slugify theme names
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+// Find builtin themes directory
+function getBuiltinThemesDir(): string | null {
+  // Try multiple possible locations
+  const possiblePaths = [
+    // When running from dist/cli (npm linked or installed)
+    path.join(__dirname, '../../resources/builtin-themes'),
+    // When installed globally via npm
+    path.join(__dirname, '../resources/builtin-themes'),
+    // Development - running from project root
+    path.join(process.cwd(), 'resources/builtin-themes'),
+  ];
+
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      return p;
+    }
+  }
+  return null;
+}
+
+// Initialize database and load themes
+function initializeDatabase(): { success: boolean; message: string; themeCount?: number } {
+  const dbDir = path.dirname(dbPath);
+
+  // Create directory if needed
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
+
+  // Create/open database
+  const db = new Database(dbPath);
+  db.pragma('foreign_keys = ON');
+  db.pragma('journal_mode = WAL');
+
+  // Run migrations
+  for (const migration of MIGRATIONS) {
+    db.exec(migration);
+  }
+
+  // Find builtin themes
+  const themesDir = getBuiltinThemesDir();
+  if (!themesDir) {
+    db.close();
+    return { success: false, message: 'Could not find builtin-themes directory' };
+  }
+
+  const files = fs.readdirSync(themesDir).filter(f => f.endsWith('.json'));
+
+  // Get existing slugs
+  const existingSlugs = new Set(
+    (db.prepare('SELECT slug FROM themes WHERE is_builtin = 1').all() as Array<{ slug: string }>)
+      .map(t => t.slug)
+  );
+
+  const insertTheme = db.prepare(`
+    INSERT INTO themes (id, name, slug, description, author, created_at, updated_at, is_favorite, is_builtin)
+    VALUES (?, ?, ?, ?, ?, ?, ?, 0, 1)
+  `);
+
+  const insertColor = db.prepare(`
+    INSERT INTO theme_colors (theme_id, color_key, hex_value) VALUES (?, ?, ?)
+  `);
+
+  let loadedCount = 0;
+  let newCount = 0;
+
+  const loadThemes = db.transaction(() => {
+    for (const file of files) {
+      try {
+        const filePath = path.join(themesDir, file);
+        const content = fs.readFileSync(filePath, 'utf-8');
+        const theme = JSON.parse(content);
+
+        const slug = slugify(theme.name);
+
+        if (existingSlugs.has(slug)) {
+          loadedCount++;
+          continue;
+        }
+
+        const id = generateUUID();
+        const now = Date.now();
+
+        insertTheme.run(
+          id,
+          theme.name,
+          slug,
+          theme.description || null,
+          theme.author || null,
+          now,
+          now
+        );
+
+        // Insert colors
+        const colors = theme.colors;
+        insertColor.run(id, 'background', colors.background);
+        insertColor.run(id, 'foreground', colors.foreground);
+        insertColor.run(id, 'cursor', colors.cursor);
+        insertColor.run(id, 'cursorText', colors.cursorText);
+        insertColor.run(id, 'selection', colors.selection);
+        insertColor.run(id, 'selectionText', colors.selectionText);
+
+        const ansiKeys = [
+          'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white',
+          'brightBlack', 'brightRed', 'brightGreen', 'brightYellow', 'brightBlue', 'brightMagenta', 'brightCyan', 'brightWhite'
+        ];
+        for (const key of ansiKeys) {
+          insertColor.run(id, `ansi_${key}`, colors.ansi[key]);
+        }
+
+        loadedCount++;
+        newCount++;
+      } catch {
+        // Skip invalid files
+      }
+    }
+  });
+
+  loadThemes();
+  db.close();
+
+  return {
+    success: true,
+    message: newCount > 0
+      ? `Loaded ${newCount} new themes (${loadedCount} total)`
+      : `Database already up to date (${loadedCount} themes)`,
+    themeCount: loadedCount
+  };
+}
+
 // Supported terminals per platform
 type Terminal =
   // macOS
@@ -99,7 +359,7 @@ const terminalNames: Record<Terminal, string> = {
 // Initialize database connection
 function getDatabase(): Database.Database | null {
   if (!fs.existsSync(dbPath)) {
-    console.log(chalk.yellow('\nShellShade database not found. Please run the ShellShade app first to initialize themes.\n'));
+    console.log(chalk.yellow('\nShellShade database not found. Run `shellshade init` to initialize.\n'));
     return null;
   }
   return new Database(dbPath);
@@ -686,12 +946,19 @@ function applyToWindowsTerminal(colors: ThemeColors, themeName: string): { succe
 
     if (fs.existsSync(settingsPath)) {
       const content = fs.readFileSync(settingsPath, 'utf-8');
-      // Remove comments (Windows Terminal allows JSON with comments)
-      const jsonContent = content.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
+
+      // Try parsing as regular JSON first (most common case)
       try {
-        settings = JSON.parse(jsonContent);
+        settings = JSON.parse(content);
       } catch {
-        // If parsing fails, start fresh
+        // If that fails, try JSONC parsing (handles comments and trailing commas)
+        try {
+          const jsonContent = stripJsonComments(content);
+          settings = JSON.parse(jsonContent);
+        } catch (parseErr) {
+          // If parsing still fails, don't overwrite - abort
+          return { success: false, message: `Failed to parse Windows Terminal settings. Please check settings.json for syntax errors.` };
+        }
       }
     }
 
@@ -1317,6 +1584,23 @@ async function searchThemes(db: Database.Database, themes: ThemeSummary[]): Prom
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
 
+  // Handle init command (no database required)
+  if (args[0] === 'init') {
+    console.log(chalk.hex('#8B5CF6').bold('\n  ▶ ShellShade Init\n'));
+    console.log(chalk.dim('  Initializing database and loading themes...\n'));
+
+    const result = initializeDatabase();
+
+    if (result.success) {
+      console.log(chalk.green(`  ✓ ${result.message}`));
+      console.log(chalk.dim(`  Database: ${dbPath}\n`));
+    } else {
+      console.log(chalk.red(`  ✗ ${result.message}\n`));
+      process.exit(1);
+    }
+    return;
+  }
+
   // Handle direct commands
   if (args[0] === 'list' || args[0] === 'ls') {
     const db = getDatabase();
@@ -1379,6 +1663,7 @@ async function main(): Promise<void> {
     console.log(chalk.hex('#8B5CF6').bold('\n  ▶ ShellShade CLI') + chalk.dim(` (${platformNames[currentPlatform]})\n`));
     console.log('  Usage:');
     console.log('    shellshade                              Interactive TUI');
+    console.log('    shellshade init                         Initialize database and load themes');
     console.log('    shellshade list                         List all themes');
     console.log('    shellshade apply <name>                 Apply theme (auto-detect terminal)');
     console.log('    shellshade apply <name> -t <terminal>   Apply theme to specific terminal');
