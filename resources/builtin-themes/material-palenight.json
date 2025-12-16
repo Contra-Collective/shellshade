@@ -1,0 +1,37 @@
+{
+  "name": "Material Palenight",
+  "author": "Mattia Astorino",
+  "description": "Material design inspired dark theme with purple undertones",
+  "colors": {
+    "background": "#292D3E",
+    "foreground": "#A6ACCD",
+    "cursor": "#FFCC00",
+    "cursorText": "#292D3E",
+    "selection": "#717CB4",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#292D3E",
+      "red": "#F07178",
+      "green": "#C3E88D",
+      "yellow": "#FFCB6B",
+      "blue": "#82AAFF",
+      "magenta": "#C792EA",
+      "cyan": "#89DDFF",
+      "white": "#D0D0D0",
+      "brightBlack": "#676E95",
+      "brightRed": "#F07178",
+      "brightGreen": "#C3E88D",
+      "brightYellow": "#FFCB6B",
+      "brightBlue": "#82AAFF",
+      "brightMagenta": "#C792EA",
+      "brightCyan": "#89DDFF",
+      "brightWhite": "#FFFFFF"
+    }
+  },
+  "settings": {
+    "fontFamily": "JetBrains Mono",
+    "fontSize": 13,
+    "cursorStyle": "block",
+    "cursorBlink": true
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Night Owl",
+  "author": "Sarah Drasner",
+  "description": "Dark theme fine-tuned for low-light coding sessions",
+  "colors": {
+    "background": "#011627",
+    "foreground": "#D6DEEB",
+    "cursor": "#80A4C2",
+    "cursorText": "#011627",
+    "selection": "#1D3B53",
+    "selectionText": "#D6DEEB",
+    "ansi": {
+      "black": "#011627",
+      "red": "#EF5350",
+      "green": "#22DA6E",
+      "yellow": "#ADDB67",
+      "blue": "#82AAFF",
+      "magenta": "#C792EA",
+      "cyan": "#21C7A8",
+      "white": "#FFFFFF",
+      "brightBlack": "#575656",
+      "brightRed": "#EF5350",
+      "brightGreen": "#22DA6E",
+      "brightYellow": "#FFEB95",
+      "brightBlue": "#82AAFF",
+      "brightMagenta": "#C792EA",
+      "brightCyan": "#7FDBCA",
+      "brightWhite": "#FFFFFF"
+    }
+  },
+  "settings": {
+    "fontFamily": "JetBrains Mono",
+    "fontSize": 13,
+    "cursorStyle": "block",
+    "cursorBlink": true
+  }
+}

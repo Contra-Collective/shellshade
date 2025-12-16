@@ -1,0 +1,37 @@
+{
+  "name": "Shades of Purple",
+  "author": "Ahmad Awais",
+  "description": "Professional dark theme with bold purple accents",
+  "colors": {
+    "background": "#2D2B55",
+    "foreground": "#FAFAFA",
+    "cursor": "#FAD000",
+    "cursorText": "#2D2B55",
+    "selection": "#A599E9",
+    "selectionText": "#2D2B55",
+    "ansi": {
+      "black": "#000000",
+      "red": "#EC3A37",
+      "green": "#3AD900",
+      "yellow": "#FAD000",
+      "blue": "#6943FF",
+      "magenta": "#FF2C6D",
+      "cyan": "#80FCFF",
+      "white": "#FFFFFF",
+      "brightBlack": "#666666",
+      "brightRed": "#EC3A37",
+      "brightGreen": "#3AD900",
+      "brightYellow": "#FAD000",
+      "brightBlue": "#6943FF",
+      "brightMagenta": "#FF2C6D",
+      "brightCyan": "#80FCFF",
+      "brightWhite": "#FFFFFF"
+    }
+  },
+  "settings": {
+    "fontFamily": "JetBrains Mono",
+    "fontSize": 13,
+    "cursorStyle": "block",
+    "cursorBlink": true
+  }
+}

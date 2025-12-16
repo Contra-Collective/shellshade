@@ -1,0 +1,37 @@
+{
+  "name": "Synthwave '84",
+  "author": "Robb Owen",
+  "description": "Retro-futuristic neon aesthetic inspired by the 80s",
+  "colors": {
+    "background": "#262335",
+    "foreground": "#FFFFFF",
+    "cursor": "#FF7EDB",
+    "cursorText": "#262335",
+    "selection": "#463465",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#262335",
+      "red": "#FE4450",
+      "green": "#72F1B8",
+      "yellow": "#FEDE5D",
+      "blue": "#36F9F6",
+      "magenta": "#FF7EDB",
+      "cyan": "#36F9F6",
+      "white": "#FFFFFF",
+      "brightBlack": "#614D85",
+      "brightRed": "#FE4450",
+      "brightGreen": "#72F1B8",
+      "brightYellow": "#F97E72",
+      "brightBlue": "#36F9F6",
+      "brightMagenta": "#FF7EDB",
+      "brightCyan": "#36F9F6",
+      "brightWhite": "#FFFFFF"
+    }
+  },
+  "settings": {
+    "fontFamily": "JetBrains Mono",
+    "fontSize": 13,
+    "cursorStyle": "block",
+    "cursorBlink": true
+  }
+}

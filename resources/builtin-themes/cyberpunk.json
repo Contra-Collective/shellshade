@@ -1,0 +1,37 @@
+{
+  "name": "Cyberpunk",
+  "author": "ShellShade",
+  "description": "High-contrast neon theme inspired by cyberpunk aesthetics",
+  "colors": {
+    "background": "#0D0D1A",
+    "foreground": "#00FF9C",
+    "cursor": "#FF00FF",
+    "cursorText": "#0D0D1A",
+    "selection": "#1A1A2E",
+    "selectionText": "#00FF9C",
+    "ansi": {
+      "black": "#0D0D1A",
+      "red": "#FF003C",
+      "green": "#00FF9C",
+      "yellow": "#FFFC58",
+      "blue": "#00D9FF",
+      "magenta": "#FF00FF",
+      "cyan": "#00FFFF",
+      "white": "#EEFFFF",
+      "brightBlack": "#4D4D6D",
+      "brightRed": "#FF4D6D",
+      "brightGreen": "#6DFFB8",
+      "brightYellow": "#FFFD8F",
+      "brightBlue": "#6DE0FF",
+      "brightMagenta": "#FF6DFF",
+      "brightCyan": "#6DFFFF",
+      "brightWhite": "#FFFFFF"
+    }
+  },
+  "settings": {
+    "fontFamily": "JetBrains Mono",
+    "fontSize": 13,
+    "cursorStyle": "block",
+    "cursorBlink": true
+  }
+}
