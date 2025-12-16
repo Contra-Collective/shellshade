@@ -1,7 +1,7 @@
 {
   "name": "@contra-collective/shellshade",
   "version": "0.2.5",
-  "description": "Terminal theme manager for macOS, Windows, and Linux",
+  "description": "Cross-platform terminal theme manager with CLI and UI. Browse, preview, and apply beautiful color schemes to your terminal in seconds.",
   "main": "dist/main/index.js",
   "bin": {
     "shellshade": "./dist/cli/index.js"
