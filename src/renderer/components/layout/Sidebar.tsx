@@ -6,9 +6,10 @@ interface SidebarProps {
   onViewChange?: (view: View) => void;
   onNewTheme?: () => void;
   onImport?: () => void;
+  version?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onViewChange, onNewTheme, onImport }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onViewChange, onNewTheme, onImport, version = '0.0.0' }) => {
   const [activeView, setActiveView] = useState<View>('library');
 
   const navItems: { id: View; label: string; icon: React.ReactNode }[] = [
@@ -136,7 +137,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onViewChange, onNewTheme, onImport })
       {/* Footer */}
       <div className="p-4 border-t border-white/5">
         <div className="text-[10px] text-white/20 text-center font-medium tracking-wide">
-          v0.1.0
+          v{version}
         </div>
       </div>
     </aside>

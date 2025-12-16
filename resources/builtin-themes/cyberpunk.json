@@ -1,37 +1,31 @@
 {
-  "name": "Cyberpunk",
+  "name": "Cyberpunk 2077",
   "author": "ShellShade",
-  "description": "High-contrast neon theme inspired by cyberpunk aesthetics",
+  "description": "Neon-drenched theme inspired by Night City",
   "colors": {
-    "background": "#0D0D1A",
-    "foreground": "#00FF9C",
-    "cursor": "#FF00FF",
-    "cursorText": "#0D0D1A",
+    "background": "#0A0A0F",
+    "foreground": "#FCEE0A",
+    "cursor": "#00F0FF",
+    "cursorText": "#0A0A0F",
     "selection": "#1A1A2E",
-    "selectionText": "#00FF9C",
+    "selectionText": "#FCEE0A",
     "ansi": {
-      "black": "#0D0D1A",
+      "black": "#0A0A0F",
       "red": "#FF003C",
       "green": "#00FF9C",
-      "yellow": "#FFFC58",
-      "blue": "#00D9FF",
-      "magenta": "#FF00FF",
-      "cyan": "#00FFFF",
+      "yellow": "#FCEE0A",
+      "blue": "#00F0FF",
+      "magenta": "#FF00A0",
+      "cyan": "#00F0FF",
       "white": "#EEFFFF",
-      "brightBlack": "#4D4D6D",
+      "brightBlack": "#3D3D4D",
       "brightRed": "#FF4D6D",
       "brightGreen": "#6DFFB8",
-      "brightYellow": "#FFFD8F",
-      "brightBlue": "#6DE0FF",
-      "brightMagenta": "#FF6DFF",
+      "brightYellow": "#FDFF8F",
+      "brightBlue": "#6DE8FF",
+      "brightMagenta": "#FF6DCA",
       "brightCyan": "#6DFFFF",
       "brightWhite": "#FFFFFF"
     }
-  },
-  "settings": {
-    "fontFamily": "JetBrains Mono",
-    "fontSize": 13,
-    "cursorStyle": "block",
-    "cursorBlink": true
   }
 }

@@ -7,7 +7,7 @@
     "foreground": "#24292F",
     "cursor": "#044289",
     "cursorText": "#FFFFFF",
-    "selection": "#0969DA33",
+    "selection": "#BBDFFF",
     "selectionText": "#24292F",
     "ansi": {
       "black": "#24292F",

@@ -15,11 +15,24 @@ const App: React.FC = () => {
   const [editingTheme, setEditingTheme] = useState<Theme | null>(null);
   const [isNewTheme, setIsNewTheme] = useState(false);
   const [platform, setPlatform] = useState<Platform>('darwin');
+  const [appVersion, setAppVersion] = useState('0.0.0');
 
   useEffect(() => {
     loadThemes();
     loadPlatform();
+    loadVersion();
   }, []);
+
+  const loadVersion = async () => {
+    try {
+      if (window.api?.system.getVersion) {
+        const v = await window.api.system.getVersion();
+        setAppVersion(v);
+      }
+    } catch {
+      // Use default version
+    }
+  };
 
   const loadPlatform = async () => {
     try {
@@ -356,7 +369,7 @@ const App: React.FC = () => {
             <div className="space-y-4">
               <div className="bg-surface-secondary/60 backdrop-blur-glass p-5 rounded-2xl border border-white/5">
                 <h3 className="font-medium text-white/90 mb-2">Application</h3>
-                <p className="text-sm text-white/40">Version 0.1.0</p>
+                <p className="text-sm text-white/40">Version {appVersion}</p>
               </div>
               <div className="bg-surface-secondary/60 backdrop-blur-glass p-5 rounded-2xl border border-white/5">
                 <h3 className="font-medium text-white/90 mb-2">Theme Storage</h3>
@@ -392,6 +405,7 @@ const App: React.FC = () => {
             onViewChange={setCurrentView}
             onNewTheme={handleNewTheme}
             onImport={handleImport}
+            version={appVersion}
           />
         )}
 

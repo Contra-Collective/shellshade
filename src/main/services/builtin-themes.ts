@@ -45,12 +45,6 @@ function colorsToRows(themeId: string, colors: ThemeColors) {
 export async function loadBuiltinThemes(): Promise<number> {
   const db = getDatabase();
 
-  // Check if we already have builtin themes
-  const existingCount = db.prepare('SELECT COUNT(*) as count FROM themes WHERE is_builtin = 1').get() as { count: number };
-  if (existingCount.count > 0) {
-    return existingCount.count;
-  }
-
   // Find the builtin themes directory
   let themesDir: string;
   if (app.isPackaged) {
@@ -66,6 +60,12 @@ export async function loadBuiltinThemes(): Promise<number> {
   }
 
   const files = fs.readdirSync(themesDir).filter(f => f.endsWith('.json'));
+
+  // Get existing builtin theme slugs to avoid duplicates
+  const existingSlugs = new Set(
+    (db.prepare('SELECT slug FROM themes WHERE is_builtin = 1').all() as Array<{ slug: string }>)
+      .map(t => t.slug)
+  );
 
   const insertTheme = db.prepare(`
     INSERT INTO themes (id, name, slug, description, author, created_at, updated_at, is_favorite, is_builtin)
@@ -89,9 +89,16 @@ export async function loadBuiltinThemes(): Promise<number> {
         const content = fs.readFileSync(filePath, 'utf-8');
         const theme: BuiltinThemeFile = JSON.parse(content);
 
+        const slug = slugify(theme.name);
+
+        // Skip if theme already exists
+        if (existingSlugs.has(slug)) {
+          loadedCount++;
+          continue;
+        }
+
         const id = uuidv4();
         const now = Date.now();
-        const slug = slugify(theme.name);
 
         insertTheme.run(
           id,
