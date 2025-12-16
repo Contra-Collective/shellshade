@@ -3,11 +3,17 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 import { getDatabase } from '../db/connection';
 import type { ThemeColors } from '../../shared/types/theme';
 import type { InstallResult } from '../../shared/types/ipc';
 
 const execAsync = promisify(exec);
+
+// Get current platform
+export function getPlatform(): 'darwin' | 'win32' | 'linux' {
+  return process.platform as 'darwin' | 'win32' | 'linux';
+}
 
 // Get theme colors from database
 function getThemeColors(themeId: string): ThemeColors | null {
@@ -307,6 +313,387 @@ export async function setTerminalDefault(themeId: string): Promise<InstallResult
       success: false,
       path: '',
       error: `Failed to set default: ${err}`,
+    };
+  }
+}
+
+// Install to Windows Terminal
+export async function installToWindowsTerminal(themeId: string): Promise<InstallResult> {
+  console.log('[ShellShade] installToWindowsTerminal called with themeId:', themeId);
+  const colors = getThemeColors(themeId);
+  const themeName = getThemeName(themeId);
+
+  if (!colors) {
+    console.log('[ShellShade] Theme not found:', themeId);
+    return { success: false, path: '', error: 'Theme not found' };
+  }
+  console.log('[ShellShade] Installing theme:', themeName);
+
+  // Windows Terminal settings path
+  const localAppData = process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local');
+  const settingsPath = path.join(
+    localAppData,
+    'Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json'
+  );
+
+  // Also check for Windows Terminal Preview and unpackaged version
+  const previewSettingsPath = path.join(
+    localAppData,
+    'Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json'
+  );
+  const unpackagedSettingsPath = path.join(localAppData, 'Microsoft/Windows Terminal/settings.json');
+
+  // Find which settings file exists
+  let actualSettingsPath = '';
+  if (fs.existsSync(settingsPath)) {
+    actualSettingsPath = settingsPath;
+  } else if (fs.existsSync(previewSettingsPath)) {
+    actualSettingsPath = previewSettingsPath;
+  } else if (fs.existsSync(unpackagedSettingsPath)) {
+    actualSettingsPath = unpackagedSettingsPath;
+  }
+
+  if (!actualSettingsPath) {
+    return {
+      success: false,
+      path: '',
+      error: 'Windows Terminal settings not found. Is Windows Terminal installed?',
+    };
+  }
+
+  try {
+    // Read existing settings
+    const settingsContent = fs.readFileSync(actualSettingsPath, 'utf-8');
+    console.log('[ShellShade] Read settings file, length:', settingsContent.length);
+
+    // Remove comments for JSON parsing (Windows Terminal uses JSONC)
+    // We need to be careful not to remove // inside strings (like URLs)
+    // Strategy: Process character by character, tracking if we're inside a string
+    let jsonWithoutComments = '';
+    let inString = false;
+    let escaped = false;
+    let i = 0;
+
+    while (i < settingsContent.length) {
+      const char = settingsContent[i];
+      const nextChar = settingsContent[i + 1];
+
+      if (escaped) {
+        jsonWithoutComments += char;
+        escaped = false;
+        i++;
+        continue;
+      }
+
+      if (char === '\\' && inString) {
+        jsonWithoutComments += char;
+        escaped = true;
+        i++;
+        continue;
+      }
+
+      if (char === '"' && !escaped) {
+        inString = !inString;
+        jsonWithoutComments += char;
+        i++;
+        continue;
+      }
+
+      // Handle comments only when not inside a string
+      if (!inString) {
+        // Single-line comment
+        if (char === '/' && nextChar === '/') {
+          // Skip until end of line
+          while (i < settingsContent.length && settingsContent[i] !== '\n') {
+            i++;
+          }
+          continue;
+        }
+        // Multi-line comment
+        if (char === '/' && nextChar === '*') {
+          i += 2; // Skip /*
+          while (i < settingsContent.length - 1) {
+            if (settingsContent[i] === '*' && settingsContent[i + 1] === '/') {
+              i += 2; // Skip */
+              break;
+            }
+            i++;
+          }
+          continue;
+        }
+      }
+
+      jsonWithoutComments += char;
+      i++;
+    }
+
+    // Also remove trailing commas which are allowed in JSONC
+    jsonWithoutComments = jsonWithoutComments.replace(/,(\s*[}\]])/g, '$1');
+
+    let settings;
+    try {
+      settings = JSON.parse(jsonWithoutComments);
+      console.log('[ShellShade] Parsed settings successfully');
+    } catch (parseErr) {
+      console.error('[ShellShade] JSON parse error:', parseErr);
+      console.error('[ShellShade] First 500 chars of processed content:', jsonWithoutComments.substring(0, 500));
+      return {
+        success: false,
+        path: actualSettingsPath,
+        error: `Failed to parse Windows Terminal settings: ${parseErr}`,
+      };
+    }
+
+    // Build Windows Terminal color scheme
+    const scheme = {
+      name: themeName,
+      background: colors.background,
+      foreground: colors.foreground,
+      cursorColor: colors.cursor,
+      selectionBackground: colors.selection,
+      black: colors.ansi.black,
+      red: colors.ansi.red,
+      green: colors.ansi.green,
+      yellow: colors.ansi.yellow,
+      blue: colors.ansi.blue,
+      purple: colors.ansi.magenta,
+      cyan: colors.ansi.cyan,
+      white: colors.ansi.white,
+      brightBlack: colors.ansi.brightBlack,
+      brightRed: colors.ansi.brightRed,
+      brightGreen: colors.ansi.brightGreen,
+      brightYellow: colors.ansi.brightYellow,
+      brightBlue: colors.ansi.brightBlue,
+      brightPurple: colors.ansi.brightMagenta,
+      brightCyan: colors.ansi.brightCyan,
+      brightWhite: colors.ansi.brightWhite,
+    };
+
+    // Initialize schemes array if it doesn't exist
+    if (!settings.schemes) {
+      settings.schemes = [];
+    }
+
+    // Remove existing scheme with same name
+    settings.schemes = settings.schemes.filter((s: { name: string }) => s.name !== themeName);
+
+    // Add the new scheme
+    settings.schemes.push(scheme);
+
+    // Apply the scheme to the default profile
+    if (!settings.profiles) {
+      settings.profiles = { defaults: {} };
+    }
+    if (!settings.profiles.defaults) {
+      settings.profiles.defaults = {};
+    }
+    settings.profiles.defaults.colorScheme = themeName;
+
+    // Write back to settings file
+    fs.writeFileSync(actualSettingsPath, JSON.stringify(settings, null, 4));
+    console.log('[ShellShade] Successfully wrote settings to:', actualSettingsPath);
+
+    return {
+      success: true,
+      path: actualSettingsPath,
+      instructions: `Theme "${themeName}" applied to Windows Terminal! Open a new tab to see changes.`,
+    };
+  } catch (err) {
+    console.error('[ShellShade] Error in installToWindowsTerminal:', err);
+    return {
+      success: false,
+      path: actualSettingsPath,
+      error: `Failed to update Windows Terminal settings: ${err}`,
+    };
+  }
+}
+
+// Install to Alacritty (Linux/macOS/Windows)
+export async function installToAlacritty(themeId: string): Promise<InstallResult> {
+  const colors = getThemeColors(themeId);
+  const themeName = getThemeName(themeId);
+
+  if (!colors) {
+    return { success: false, path: '', error: 'Theme not found' };
+  }
+
+  // Alacritty config paths by platform
+  let configPath: string;
+  const platform = getPlatform();
+
+  if (platform === 'win32') {
+    configPath = path.join(process.env.APPDATA || '', 'alacritty', 'alacritty.toml');
+  } else if (platform === 'darwin') {
+    configPath = path.join(os.homedir(), '.config', 'alacritty', 'alacritty.toml');
+  } else {
+    // Linux - check XDG_CONFIG_HOME first
+    const xdgConfig = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config');
+    configPath = path.join(xdgConfig, 'alacritty', 'alacritty.toml');
+  }
+
+  // Ensure directory exists
+  const configDir = path.dirname(configPath);
+  if (!fs.existsSync(configDir)) {
+    fs.mkdirSync(configDir, { recursive: true });
+  }
+
+  // Build Alacritty TOML color config
+  const tomlContent = `# ShellShade Theme: ${themeName}
+# Generated by ShellShade
+
+[colors.primary]
+background = "${colors.background}"
+foreground = "${colors.foreground}"
+
+[colors.cursor]
+text = "${colors.cursorText}"
+cursor = "${colors.cursor}"
+
+[colors.selection]
+text = "${colors.selectionText}"
+background = "${colors.selection}"
+
+[colors.normal]
+black = "${colors.ansi.black}"
+red = "${colors.ansi.red}"
+green = "${colors.ansi.green}"
+yellow = "${colors.ansi.yellow}"
+blue = "${colors.ansi.blue}"
+magenta = "${colors.ansi.magenta}"
+cyan = "${colors.ansi.cyan}"
+white = "${colors.ansi.white}"
+
+[colors.bright]
+black = "${colors.ansi.brightBlack}"
+red = "${colors.ansi.brightRed}"
+green = "${colors.ansi.brightGreen}"
+yellow = "${colors.ansi.brightYellow}"
+blue = "${colors.ansi.brightBlue}"
+magenta = "${colors.ansi.brightMagenta}"
+cyan = "${colors.ansi.brightCyan}"
+white = "${colors.ansi.brightWhite}"
+`;
+
+  try {
+    // Read existing config if it exists
+    let existingContent = '';
+    if (fs.existsSync(configPath)) {
+      existingContent = fs.readFileSync(configPath, 'utf-8');
+      // Remove existing color sections
+      existingContent = existingContent
+        .replace(/\[colors\.primary\][\s\S]*?(?=\[|$)/g, '')
+        .replace(/\[colors\.cursor\][\s\S]*?(?=\[|$)/g, '')
+        .replace(/\[colors\.selection\][\s\S]*?(?=\[|$)/g, '')
+        .replace(/\[colors\.normal\][\s\S]*?(?=\[|$)/g, '')
+        .replace(/\[colors\.bright\][\s\S]*?(?=\[|$)/g, '')
+        .replace(/# ShellShade Theme:.*\n# Generated by ShellShade\n*/g, '')
+        .trim();
+    }
+
+    // Combine existing config with new colors
+    const finalContent = existingContent ? `${existingContent}\n\n${tomlContent}` : tomlContent;
+    fs.writeFileSync(configPath, finalContent);
+
+    return {
+      success: true,
+      path: configPath,
+      instructions: `Theme "${themeName}" applied to Alacritty! Restart Alacritty to see changes.`,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      path: configPath,
+      error: `Failed to update Alacritty config: ${err}`,
+    };
+  }
+}
+
+// Install to Kitty (Linux/macOS)
+export async function installToKitty(themeId: string): Promise<InstallResult> {
+  const colors = getThemeColors(themeId);
+  const themeName = getThemeName(themeId);
+
+  if (!colors) {
+    return { success: false, path: '', error: 'Theme not found' };
+  }
+
+  // Kitty config path
+  const platform = getPlatform();
+  let configDir: string;
+
+  if (platform === 'darwin') {
+    configDir = path.join(os.homedir(), '.config', 'kitty');
+  } else {
+    const xdgConfig = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config');
+    configDir = path.join(xdgConfig, 'kitty');
+  }
+
+  const themePath = path.join(configDir, 'current-theme.conf');
+  const configPath = path.join(configDir, 'kitty.conf');
+
+  // Ensure directory exists
+  if (!fs.existsSync(configDir)) {
+    fs.mkdirSync(configDir, { recursive: true });
+  }
+
+  // Build Kitty color config
+  const kittyTheme = `# ShellShade Theme: ${themeName}
+# Generated by ShellShade
+
+foreground ${colors.foreground}
+background ${colors.background}
+cursor ${colors.cursor}
+cursor_text_color ${colors.cursorText}
+selection_foreground ${colors.selectionText}
+selection_background ${colors.selection}
+
+# Normal colors
+color0 ${colors.ansi.black}
+color1 ${colors.ansi.red}
+color2 ${colors.ansi.green}
+color3 ${colors.ansi.yellow}
+color4 ${colors.ansi.blue}
+color5 ${colors.ansi.magenta}
+color6 ${colors.ansi.cyan}
+color7 ${colors.ansi.white}
+
+# Bright colors
+color8 ${colors.ansi.brightBlack}
+color9 ${colors.ansi.brightRed}
+color10 ${colors.ansi.brightGreen}
+color11 ${colors.ansi.brightYellow}
+color12 ${colors.ansi.brightBlue}
+color13 ${colors.ansi.brightMagenta}
+color14 ${colors.ansi.brightCyan}
+color15 ${colors.ansi.brightWhite}
+`;
+
+  try {
+    // Write theme file
+    fs.writeFileSync(themePath, kittyTheme);
+
+    // Ensure kitty.conf includes the theme
+    let kittyConf = '';
+    if (fs.existsSync(configPath)) {
+      kittyConf = fs.readFileSync(configPath, 'utf-8');
+    }
+
+    const includeStatement = 'include current-theme.conf';
+    if (!kittyConf.includes(includeStatement)) {
+      kittyConf = `${includeStatement}\n${kittyConf}`;
+      fs.writeFileSync(configPath, kittyConf);
+    }
+
+    return {
+      success: true,
+      path: themePath,
+      instructions: `Theme "${themeName}" applied to Kitty! Press Ctrl+Shift+F5 to reload or restart Kitty.`,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      path: themePath,
+      error: `Failed to update Kitty config: ${err}`,
     };
   }
 }

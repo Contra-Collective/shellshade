@@ -27,6 +27,9 @@ const api: IpcApi = {
   install: {
     toTerminalApp: (themeId: string) => ipcRenderer.invoke(IPC_CHANNELS.INSTALL_TERMINAL_APP, themeId),
     toIterm2: (themeId: string) => ipcRenderer.invoke(IPC_CHANNELS.INSTALL_ITERM2, themeId),
+    toWindowsTerminal: (themeId: string) => ipcRenderer.invoke(IPC_CHANNELS.INSTALL_WINDOWS_TERMINAL, themeId),
+    toAlacritty: (themeId: string) => ipcRenderer.invoke(IPC_CHANNELS.INSTALL_ALACRITTY, themeId),
+    toKitty: (themeId: string) => ipcRenderer.invoke(IPC_CHANNELS.INSTALL_KITTY, themeId),
     setTerminalDefault: (themeId: string) => ipcRenderer.invoke('install:set-terminal-default', themeId),
     detectInstalled: () => ipcRenderer.invoke(IPC_CHANNELS.INSTALL_DETECT),
   },
@@ -43,6 +46,7 @@ const api: IpcApi = {
     getFonts: () => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_GET_FONTS),
     openInFinder: (path: string) => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_OPEN_IN_FINDER, path),
     getVersion: () => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_GET_VERSION),
+    getPlatform: () => ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_GET_PLATFORM),
   },
 };
 

@@ -6,16 +6,36 @@ import type { Theme, ThemeSummary } from '../shared/types/theme';
 
 type View = 'library' | 'editor' | 'settings';
 
+type Platform = 'darwin' | 'win32' | 'linux';
+
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('library');
   const [themes, setThemes] = useState<ThemeSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingTheme, setEditingTheme] = useState<Theme | null>(null);
   const [isNewTheme, setIsNewTheme] = useState(false);
+  const [platform, setPlatform] = useState<Platform>('darwin');
 
   useEffect(() => {
     loadThemes();
+    loadPlatform();
   }, []);
+
+  const loadPlatform = async () => {
+    console.log('[ShellShade] loadPlatform called');
+    try {
+      if (window.api && window.api.system.getPlatform) {
+        console.log('[ShellShade] Calling system.getPlatform...');
+        const p = await window.api.system.getPlatform();
+        console.log('[ShellShade] Platform detected:', p);
+        setPlatform(p);
+      } else {
+        console.error('[ShellShade] getPlatform not available on window.api.system');
+      }
+    } catch (err) {
+      console.error('[ShellShade] Failed to get platform:', err);
+    }
+  };
 
   const loadThemes = async () => {
     try {
@@ -125,16 +145,46 @@ const App: React.FC = () => {
     }
   };
 
-  const handleApplyTheme = async (themeId: string, target: 'iterm2' | 'terminal' | 'terminal-default') => {
+  const handleApplyTheme = async (themeId: string, target: 'iterm2' | 'terminal' | 'terminal-default' | 'windows-terminal' | 'alacritty' | 'kitty' | 'auto') => {
+    console.log('[ShellShade] handleApplyTheme called with:', { themeId, target, platform });
     try {
       if (window.api) {
         let result;
-        if (target === 'iterm2') {
-          result = await window.api.install.toIterm2(themeId);
-        } else if (target === 'terminal-default') {
-          result = await window.api.install.setTerminalDefault(themeId);
-        } else {
-          result = await window.api.install.toTerminalApp(themeId);
+
+        // Auto-detect: use platform default terminal
+        let actualTarget = target;
+        if (target === 'auto') {
+          console.log('[ShellShade] Auto-detecting terminal for platform:', platform);
+          if (platform === 'win32') {
+            actualTarget = 'windows-terminal';
+          } else if (platform === 'darwin') {
+            actualTarget = 'terminal';
+          } else {
+            actualTarget = 'alacritty'; // Default for Linux
+          }
+        }
+        console.log('[ShellShade] Using target:', actualTarget);
+
+        switch (actualTarget) {
+          case 'iterm2':
+            result = await window.api.install.toIterm2(themeId);
+            break;
+          case 'terminal-default':
+            result = await window.api.install.setTerminalDefault(themeId);
+            break;
+          case 'windows-terminal':
+            result = await window.api.install.toWindowsTerminal(themeId);
+            break;
+          case 'alacritty':
+            result = await window.api.install.toAlacritty(themeId);
+            break;
+          case 'kitty':
+            result = await window.api.install.toKitty(themeId);
+            break;
+          case 'terminal':
+          default:
+            result = await window.api.install.toTerminalApp(themeId);
+            break;
         }
 
         if (result.success) {
@@ -253,10 +303,10 @@ const App: React.FC = () => {
                           {/* Apply button - directly installs theme */}
                           <button
                             type="button"
-                            onClick={() => handleApplyTheme(theme.id, 'terminal')}
+                            onClick={() => handleApplyTheme(theme.id, 'auto')}
                             className="w-8 h-8 flex items-center justify-center rounded-lg bg-green-500/20 hover:bg-green-500/30 text-green-400 cursor-pointer transition-all"
                             style={noDragStyle}
-                            title="Apply theme to Terminal"
+                            title={platform === 'win32' ? 'Apply to Windows Terminal' : platform === 'darwin' ? 'Apply to Terminal.app' : 'Apply to Alacritty'}
                           >
                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z" />

@@ -1,6 +1,6 @@
 {
-  "name": "shellshade",
-  "version": "0.1.0",
+  "name": "@contra-collective/shellshade",
+  "version": "0.2.0",
   "description": "Terminal theme manager for macOS, Windows, and Linux",
   "main": "dist/main/index.js",
   "bin": {
@@ -8,13 +8,17 @@
   },
   "author": "masecode67",
   "license": "MIT",
-  "homepage": "https://github.com/masecode67/shellshade#readme",
+  "files": [
+    "dist",
+    "resources/builtin-themes"
+  ],
+  "homepage": "https://contra-collective.github.io/shellshade/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/masecode67/shellshade.git"
+    "url": "git+https://github.com/contra-collective/shellshade.git"
   },
   "bugs": {
-    "url": "https://github.com/masecode67/shellshade/issues"
+    "url": "https://github.com/contra-collective/shellshade/issues"
   },
   "keywords": [
     "terminal",

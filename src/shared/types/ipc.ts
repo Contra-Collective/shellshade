@@ -40,7 +40,11 @@ export const IPC_CHANNELS = {
   // Installation
   INSTALL_TERMINAL_APP: 'install:terminalApp',
   INSTALL_ITERM2: 'install:iterm2',
+  INSTALL_WINDOWS_TERMINAL: 'install:windowsTerminal',
+  INSTALL_ALACRITTY: 'install:alacritty',
+  INSTALL_KITTY: 'install:kitty',
   INSTALL_DETECT: 'install:detect',
+  SYSTEM_GET_PLATFORM: 'system:getPlatform',
 
   // Tags
   TAGS_GET_ALL: 'tags:getAll',
@@ -78,6 +82,9 @@ export interface IpcApi {
   install: {
     toTerminalApp(themeId: string): Promise<InstallResult>;
     toIterm2(themeId: string): Promise<InstallResult>;
+    toWindowsTerminal(themeId: string): Promise<InstallResult>;
+    toAlacritty(themeId: string): Promise<InstallResult>;
+    toKitty(themeId: string): Promise<InstallResult>;
     setTerminalDefault(themeId: string): Promise<InstallResult>;
     detectInstalled(): Promise<InstalledTheme[]>;
   };
@@ -94,5 +101,6 @@ export interface IpcApi {
     getFonts(): Promise<string[]>;
     openInFinder(path: string): Promise<void>;
     getVersion(): Promise<string>;
+    getPlatform(): Promise<'darwin' | 'win32' | 'linux'>;
   };
 }

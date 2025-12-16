@@ -7,7 +7,7 @@ interface ThemeEditorProps {
   theme: Theme | null;
   onSave: (theme: Partial<Theme>) => void;
   onCancel: () => void;
-  onApply?: (themeId: string, target: 'iterm2' | 'terminal') => void;
+  onApply?: (themeId: string, target: 'iterm2' | 'terminal' | 'terminal-default' | 'windows-terminal' | 'alacritty' | 'kitty' | 'auto') => void;
   isNew?: boolean;
 }
 
@@ -102,10 +102,10 @@ const ThemeEditor: React.FC<ThemeEditorProps> = ({ theme, onSave, onCancel, onAp
           {!isNew && theme && onApply && (
             <button
               type="button"
-              onClick={() => onApply(theme.id, 'terminal')}
+              onClick={() => onApply(theme.id, 'auto')}
               className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 text-green-400 rounded-xl transition-all duration-200 cursor-pointer flex items-center gap-2 text-sm font-medium"
               style={noDragStyle}
-              title="Apply theme to Terminal"
+              title="Apply theme"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M6.3 2.84A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.27l9.344-5.891a1.5 1.5 0 000-2.538L6.3 2.841z" />
