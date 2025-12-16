@@ -1,0 +1,31 @@
+{
+  "name": "Cali Sunset",
+  "author": "ShellShade",
+  "description": "West coast sunset vibes",
+  "colors": {
+    "background": "#1A1510",
+    "foreground": "#F5DEB3",
+    "cursor": "#FF8C00",
+    "cursorText": "#1A1510",
+    "selection": "#3A3020",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#1A1510",
+      "red": "#FF4500",
+      "green": "#32CD32",
+      "yellow": "#FF8C00",
+      "blue": "#4682B4",
+      "magenta": "#DA70D6",
+      "cyan": "#20B2AA",
+      "white": "#F5DEB3",
+      "brightBlack": "#5A5040",
+      "brightRed": "#FF6347",
+      "brightGreen": "#7CFC00",
+      "brightYellow": "#FFA500",
+      "brightBlue": "#87CEEB",
+      "brightMagenta": "#EE82EE",
+      "brightCyan": "#40E0D0",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

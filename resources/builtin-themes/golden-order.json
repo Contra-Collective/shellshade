@@ -1,0 +1,31 @@
+{
+  "name": "Golden Order",
+  "author": "ShellShade",
+  "description": "Dark souls gold and shadow",
+  "colors": {
+    "background": "#0A0908",
+    "foreground": "#D4AF37",
+    "cursor": "#FFD700",
+    "cursorText": "#0A0908",
+    "selection": "#2A2928",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0A0908",
+      "red": "#8B0000",
+      "green": "#556B2F",
+      "yellow": "#D4AF37",
+      "blue": "#4169E1",
+      "magenta": "#663399",
+      "cyan": "#5F9EA0",
+      "white": "#C0B090",
+      "brightBlack": "#4A4948",
+      "brightRed": "#B22222",
+      "brightGreen": "#6B8E23",
+      "brightYellow": "#FFD700",
+      "brightBlue": "#6495ED",
+      "brightMagenta": "#9370DB",
+      "brightCyan": "#7FFFD4",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

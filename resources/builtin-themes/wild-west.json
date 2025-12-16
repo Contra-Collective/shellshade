@@ -1,0 +1,31 @@
+{
+  "name": "Wild West",
+  "author": "ShellShade",
+  "description": "Dusty prairie sunset colors",
+  "colors": {
+    "background": "#1A120A",
+    "foreground": "#D2B48C",
+    "cursor": "#8B4513",
+    "cursorText": "#1A120A",
+    "selection": "#3A2A1A",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#1A120A",
+      "red": "#8B0000",
+      "green": "#6B8E23",
+      "yellow": "#DAA520",
+      "blue": "#4682B4",
+      "magenta": "#8B4513",
+      "cyan": "#D2691E",
+      "white": "#D2B48C",
+      "brightBlack": "#5A4A3A",
+      "brightRed": "#CD5C5C",
+      "brightGreen": "#9ACD32",
+      "brightYellow": "#FFD700",
+      "brightBlue": "#87CEEB",
+      "brightMagenta": "#A0522D",
+      "brightCyan": "#DEB887",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

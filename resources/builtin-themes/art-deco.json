@@ -1,0 +1,31 @@
+{
+  "name": "Art Deco",
+  "author": "ShellShade",
+  "description": "1920s art deco gold and teal",
+  "colors": {
+    "background": "#0A1014",
+    "foreground": "#D4AF37",
+    "cursor": "#20B2AA",
+    "cursorText": "#0A1014",
+    "selection": "#1A2A34",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0A1014",
+      "red": "#B8860B",
+      "green": "#20B2AA",
+      "yellow": "#D4AF37",
+      "blue": "#4682B4",
+      "magenta": "#8B7355",
+      "cyan": "#5F9EA0",
+      "white": "#D4C4A8",
+      "brightBlack": "#3A4A54",
+      "brightRed": "#DAA520",
+      "brightGreen": "#48D1CC",
+      "brightYellow": "#FFD700",
+      "brightBlue": "#87CEEB",
+      "brightMagenta": "#AB9375",
+      "brightCyan": "#7FFFD4",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

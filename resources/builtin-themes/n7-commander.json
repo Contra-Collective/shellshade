@@ -1,0 +1,31 @@
+{
+  "name": "N7 Commander",
+  "author": "ShellShade",
+  "description": "Space commander red and black",
+  "colors": {
+    "background": "#0A0A0F",
+    "foreground": "#E8E8E8",
+    "cursor": "#FF0000",
+    "cursorText": "#0A0A0F",
+    "selection": "#2A2A3F",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0A0A0F",
+      "red": "#FF0000",
+      "green": "#00FF00",
+      "yellow": "#FF6600",
+      "blue": "#0066FF",
+      "magenta": "#9966FF",
+      "cyan": "#00CCFF",
+      "white": "#E8E8E8",
+      "brightBlack": "#4A4A5F",
+      "brightRed": "#FF4444",
+      "brightGreen": "#66FF66",
+      "brightYellow": "#FF9933",
+      "brightBlue": "#3399FF",
+      "brightMagenta": "#BB99FF",
+      "brightCyan": "#66DDFF",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

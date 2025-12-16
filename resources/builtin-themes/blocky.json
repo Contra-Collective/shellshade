@@ -1,0 +1,31 @@
+{
+  "name": "Blocky",
+  "author": "ShellShade",
+  "description": "Colorful block-based palette",
+  "colors": {
+    "background": "#1D1D1D",
+    "foreground": "#FFFFFF",
+    "cursor": "#5B5B5B",
+    "cursorText": "#FFFFFF",
+    "selection": "#3D3D3D",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#1D1D1D",
+      "red": "#AA0000",
+      "green": "#00AA00",
+      "yellow": "#FFAA00",
+      "blue": "#5555FF",
+      "magenta": "#AA00AA",
+      "cyan": "#00AAAA",
+      "white": "#AAAAAA",
+      "brightBlack": "#555555",
+      "brightRed": "#FF5555",
+      "brightGreen": "#55FF55",
+      "brightYellow": "#FFFF55",
+      "brightBlue": "#5555FF",
+      "brightMagenta": "#FF55FF",
+      "brightCyan": "#55FFFF",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

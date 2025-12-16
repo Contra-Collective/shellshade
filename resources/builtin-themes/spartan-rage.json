@@ -1,0 +1,31 @@
+{
+  "name": "Spartan Rage",
+  "author": "ShellShade",
+  "description": "Ancient warrior red and ash",
+  "colors": {
+    "background": "#0A0A0F",
+    "foreground": "#C4C4C4",
+    "cursor": "#FF0000",
+    "cursorText": "#0A0A0F",
+    "selection": "#2A2A3F",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0A0A0F",
+      "red": "#B22222",
+      "green": "#2E8B57",
+      "yellow": "#D4AF37",
+      "blue": "#4169E1",
+      "magenta": "#800080",
+      "cyan": "#5F9EA0",
+      "white": "#C4C4C4",
+      "brightBlack": "#4A4A5F",
+      "brightRed": "#FF0000",
+      "brightGreen": "#3CB371",
+      "brightYellow": "#FFD700",
+      "brightBlue": "#6495ED",
+      "brightMagenta": "#9932CC",
+      "brightCyan": "#7FFFD4",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

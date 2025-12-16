@@ -1,0 +1,31 @@
+{
+  "name": "Machine Dawn",
+  "author": "ShellShade",
+  "description": "Nature reclaiming technology",
+  "colors": {
+    "background": "#0F1215",
+    "foreground": "#E8DCC8",
+    "cursor": "#FF6600",
+    "cursorText": "#0F1215",
+    "selection": "#2F3235",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0F1215",
+      "red": "#C74000",
+      "green": "#228B22",
+      "yellow": "#FF6600",
+      "blue": "#4682B4",
+      "magenta": "#8B4513",
+      "cyan": "#20B2AA",
+      "white": "#E8DCC8",
+      "brightBlack": "#4F5255",
+      "brightRed": "#FF7733",
+      "brightGreen": "#32CD32",
+      "brightYellow": "#FFA500",
+      "brightBlue": "#87CEEB",
+      "brightMagenta": "#CD853F",
+      "brightCyan": "#48D1CC",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

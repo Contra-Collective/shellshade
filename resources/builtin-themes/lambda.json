@@ -1,0 +1,31 @@
+{
+  "name": "Lambda",
+  "author": "ShellShade",
+  "description": "Orange hazard suit inspired terminal",
+  "colors": {
+    "background": "#FF6600",
+    "foreground": "#FFFFFF",
+    "cursor": "#FFFFFF",
+    "cursorText": "#FF6600",
+    "selection": "#CC5200",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#1C1410",
+      "red": "#FF3333",
+      "green": "#AAFFAA",
+      "yellow": "#FFFF66",
+      "blue": "#6699FF",
+      "magenta": "#FF99FF",
+      "cyan": "#99FFFF",
+      "white": "#FFFFFF",
+      "brightBlack": "#5D4E37",
+      "brightRed": "#FF6666",
+      "brightGreen": "#CCFFCC",
+      "brightYellow": "#FFFF99",
+      "brightBlue": "#99BBFF",
+      "brightMagenta": "#FFBBFF",
+      "brightCyan": "#BBFFFF",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

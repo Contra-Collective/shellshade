@@ -1,0 +1,31 @@
+{
+  "name": "Spartan",
+  "author": "ShellShade",
+  "description": "Military sci-fi colors",
+  "colors": {
+    "background": "#0A0A14",
+    "foreground": "#C8D4E8",
+    "cursor": "#00FF00",
+    "cursorText": "#0A0A14",
+    "selection": "#2A2A44",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0A0A14",
+      "red": "#FF3366",
+      "green": "#00FF00",
+      "yellow": "#FFD700",
+      "blue": "#4169E1",
+      "magenta": "#8A2BE2",
+      "cyan": "#00CED1",
+      "white": "#C8D4E8",
+      "brightBlack": "#4A4A64",
+      "brightRed": "#FF6699",
+      "brightGreen": "#7FFF7F",
+      "brightYellow": "#FFFF00",
+      "brightBlue": "#6495ED",
+      "brightMagenta": "#9370DB",
+      "brightCyan": "#48D1CC",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

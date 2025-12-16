@@ -1,0 +1,31 @@
+{
+  "name": "Aperture",
+  "author": "ShellShade",
+  "description": "Science lab blue and orange",
+  "colors": {
+    "background": "#0F0F0F",
+    "foreground": "#E8E8E8",
+    "cursor": "#FF8C00",
+    "cursorText": "#0F0F0F",
+    "selection": "#2F2F2F",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0F0F0F",
+      "red": "#FF4500",
+      "green": "#32CD32",
+      "yellow": "#FF8C00",
+      "blue": "#00BFFF",
+      "magenta": "#BA55D3",
+      "cyan": "#00CED1",
+      "white": "#E8E8E8",
+      "brightBlack": "#4F4F4F",
+      "brightRed": "#FF6347",
+      "brightGreen": "#7CFC00",
+      "brightYellow": "#FFA500",
+      "brightBlue": "#87CEFA",
+      "brightMagenta": "#DA70D6",
+      "brightCyan": "#48D1CC",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

@@ -8,6 +8,17 @@ type View = 'library' | 'editor' | 'settings';
 
 type Platform = 'darwin' | 'win32' | 'linux';
 
+type ThemeFilter = 'all' | 'dark' | 'light';
+
+// Check if a hex color is dark (luminance < 0.5)
+const isColorDark = (hex: string): boolean => {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+  return luminance < 0.5;
+};
+
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('library');
   const [themes, setThemes] = useState<ThemeSummary[]>([]);
@@ -16,6 +27,7 @@ const App: React.FC = () => {
   const [isNewTheme, setIsNewTheme] = useState(false);
   const [platform, setPlatform] = useState<Platform>('darwin');
   const [appVersion, setAppVersion] = useState('0.0.0');
+  const [themeFilter, setThemeFilter] = useState<ThemeFilter>('all');
 
   useEffect(() => {
     loadThemes();
@@ -222,10 +234,19 @@ const App: React.FC = () => {
 
     switch (currentView) {
       case 'library':
+        const filteredThemes = themes.filter(theme => {
+          if (themeFilter === 'all') return true;
+          const isDark = isColorDark(theme.previewColors.background);
+          return themeFilter === 'dark' ? isDark : !isDark;
+        });
+
+        const darkCount = themes.filter(t => isColorDark(t.previewColors.background)).length;
+        const lightCount = themes.length - darkCount;
+
         return (
           <div className="p-8">
             {/* Header */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-semibold tracking-tight">Theme Library</h2>
                 <p className="text-white/50 text-sm mt-1">{themes.length} themes available</p>
@@ -237,6 +258,43 @@ const App: React.FC = () => {
                 style={noDragStyle}
               >
                 + New Theme
+              </button>
+            </div>
+
+            {/* Filter Tabs */}
+            <div className="flex gap-2 mb-6" style={noDragStyle}>
+              <button
+                type="button"
+                onClick={() => setThemeFilter('all')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                  themeFilter === 'all'
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/50 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                All ({themes.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setThemeFilter('dark')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                  themeFilter === 'dark'
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/50 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                Dark ({darkCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setThemeFilter('light')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                  themeFilter === 'light'
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/50 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                Light ({lightCount})
               </button>
             </div>
 
@@ -259,7 +317,7 @@ const App: React.FC = () => {
               </div>
             ) : (
               <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {themes.map((theme) => (
+                {filteredThemes.map((theme) => (
                   <div
                     key={theme.id}
                     className="group bg-surface-secondary/60 backdrop-blur-glass rounded-2xl border border-white/5 hover:border-white/20 hover:bg-surface-tertiary/60 transition-all duration-300 hover:shadow-glass-lg hover:-translate-y-0.5 relative"
@@ -295,11 +353,6 @@ const App: React.FC = () => {
                           onClick={() => handleEditTheme(theme.id)}
                         >
                           <div className="font-medium truncate text-white/90">{theme.name}</div>
-                          {theme.author && (
-                            <div className="text-xs text-white/40 truncate mt-0.5">
-                              by {theme.author}
-                            </div>
-                          )}
                         </div>
 
                         {/* Action buttons */}

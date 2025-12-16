@@ -1,0 +1,31 @@
+{
+  "name": "Azeroth",
+  "author": "ShellShade",
+  "description": "Epic fantasy gold and battle colors",
+  "colors": {
+    "background": "#0F0E0A",
+    "foreground": "#FFD100",
+    "cursor": "#FF0000",
+    "cursorText": "#0F0E0A",
+    "selection": "#2F2E2A",
+    "selectionText": "#FFD100",
+    "ansi": {
+      "black": "#0F0E0A",
+      "red": "#C41E3A",
+      "green": "#00FF00",
+      "yellow": "#FFD100",
+      "blue": "#0070DD",
+      "magenta": "#9D00FF",
+      "cyan": "#00C0C0",
+      "white": "#FFD100",
+      "brightBlack": "#4F4E4A",
+      "brightRed": "#FF3366",
+      "brightGreen": "#66FF66",
+      "brightYellow": "#FFE066",
+      "brightBlue": "#3399FF",
+      "brightMagenta": "#BB66FF",
+      "brightCyan": "#66DDDD",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

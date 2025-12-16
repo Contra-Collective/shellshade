@@ -1,0 +1,31 @@
+{
+  "name": "Monster Hunter",
+  "author": "ShellShade",
+  "description": "Dark medieval fantasy tones",
+  "colors": {
+    "background": "#0F0D0A",
+    "foreground": "#C4B8A0",
+    "cursor": "#C0C0C0",
+    "cursorText": "#0F0D0A",
+    "selection": "#2F2D2A",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0F0D0A",
+      "red": "#8B0000",
+      "green": "#556B2F",
+      "yellow": "#DAA520",
+      "blue": "#4682B4",
+      "magenta": "#6B3FA0",
+      "cyan": "#5F9EA0",
+      "white": "#C4B8A0",
+      "brightBlack": "#4F4D4A",
+      "brightRed": "#CD5C5C",
+      "brightGreen": "#6B8E23",
+      "brightYellow": "#FFD700",
+      "brightBlue": "#6495ED",
+      "brightMagenta": "#9370DB",
+      "brightCyan": "#7FFFD4",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

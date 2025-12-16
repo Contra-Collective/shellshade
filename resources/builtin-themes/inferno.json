@@ -1,0 +1,31 @@
+{
+  "name": "Inferno",
+  "author": "ShellShade",
+  "description": "Fiery reds and dark depths",
+  "colors": {
+    "background": "#1A0A0A",
+    "foreground": "#D4D4D4",
+    "cursor": "#FF0000",
+    "cursorText": "#1A0A0A",
+    "selection": "#4A1A1A",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#1A0A0A",
+      "red": "#FF0000",
+      "green": "#8B0000",
+      "yellow": "#FF4500",
+      "blue": "#8B4513",
+      "magenta": "#DC143C",
+      "cyan": "#CD5C5C",
+      "white": "#D4D4D4",
+      "brightBlack": "#4A4A4A",
+      "brightRed": "#FF4444",
+      "brightGreen": "#B22222",
+      "brightYellow": "#FF6347",
+      "brightBlue": "#A0522D",
+      "brightMagenta": "#FF1493",
+      "brightCyan": "#F08080",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

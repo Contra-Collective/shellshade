@@ -1,0 +1,31 @@
+{
+  "name": "Hyrule",
+  "author": "ShellShade",
+  "description": "Enchanted forest green and gold",
+  "colors": {
+    "background": "#0A140A",
+    "foreground": "#98FB98",
+    "cursor": "#FFD700",
+    "cursorText": "#0A140A",
+    "selection": "#1A3A1A",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0A140A",
+      "red": "#DC143C",
+      "green": "#228B22",
+      "yellow": "#FFD700",
+      "blue": "#4169E1",
+      "magenta": "#9932CC",
+      "cyan": "#20B2AA",
+      "white": "#98FB98",
+      "brightBlack": "#3A5A3A",
+      "brightRed": "#FF6B6B",
+      "brightGreen": "#32CD32",
+      "brightYellow": "#FFFF00",
+      "brightBlue": "#6495ED",
+      "brightMagenta": "#DA70D6",
+      "brightCyan": "#48D1CC",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Aeternum",
+  "author": "ShellShade",
+  "description": "Colonial explorer earth tones",
+  "colors": {
+    "background": "#0A1210",
+    "foreground": "#C9B896",
+    "cursor": "#D4AF37",
+    "cursorText": "#0A1210",
+    "selection": "#1A2A28",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0A1210",
+      "red": "#8B0000",
+      "green": "#228B22",
+      "yellow": "#D4AF37",
+      "blue": "#2F4F4F",
+      "magenta": "#4A3728",
+      "cyan": "#5F9EA0",
+      "white": "#C9B896",
+      "brightBlack": "#3A4A48",
+      "brightRed": "#B22222",
+      "brightGreen": "#3CB371",
+      "brightYellow": "#FFD700",
+      "brightBlue": "#4F6F6F",
+      "brightMagenta": "#6A5748",
+      "brightCyan": "#7FBFC0",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

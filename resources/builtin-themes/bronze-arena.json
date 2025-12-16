@@ -1,0 +1,31 @@
+{
+  "name": "Bronze Arena",
+  "author": "ShellShade",
+  "description": "Ancient bronze and leather tones",
+  "colors": {
+    "background": "#1A1612",
+    "foreground": "#C4A882",
+    "cursor": "#8B7355",
+    "cursorText": "#1A1612",
+    "selection": "#3A3228",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#1A1612",
+      "red": "#8B4513",
+      "green": "#6B8E23",
+      "yellow": "#CD853F",
+      "blue": "#5D4E37",
+      "magenta": "#704214",
+      "cyan": "#8B7355",
+      "white": "#C4A882",
+      "brightBlack": "#4A4238",
+      "brightRed": "#A0522D",
+      "brightGreen": "#8BAE43",
+      "brightYellow": "#DEB887",
+      "brightBlue": "#7D6E57",
+      "brightMagenta": "#906234",
+      "brightCyan": "#AB9375",
+      "brightWhite": "#E4D8C2"
+    }
+  }
+}

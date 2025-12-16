@@ -1,0 +1,31 @@
+{
+  "name": "Miami Nights",
+  "author": "ShellShade",
+  "description": "1980s neon Miami aesthetic",
+  "colors": {
+    "background": "#1A0A1F",
+    "foreground": "#FFB6C1",
+    "cursor": "#00FFFF",
+    "cursorText": "#1A0A1F",
+    "selection": "#4A1A4F",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#1A0A1F",
+      "red": "#FF1493",
+      "green": "#00FF7F",
+      "yellow": "#FFD700",
+      "blue": "#00BFFF",
+      "magenta": "#FF00FF",
+      "cyan": "#00FFFF",
+      "white": "#FFB6C1",
+      "brightBlack": "#4A3A5F",
+      "brightRed": "#FF69B4",
+      "brightGreen": "#7FFF00",
+      "brightYellow": "#FFFF00",
+      "brightBlue": "#87CEEB",
+      "brightMagenta": "#FF77FF",
+      "brightCyan": "#77FFFF",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

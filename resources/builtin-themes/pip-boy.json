@@ -1,0 +1,31 @@
+{
+  "name": "Pip-Boy",
+  "author": "ShellShade",
+  "description": "Retro green phosphor terminal",
+  "colors": {
+    "background": "#0A0F0A",
+    "foreground": "#14FF14",
+    "cursor": "#14FF14",
+    "cursorText": "#0A0F0A",
+    "selection": "#1A3A1A",
+    "selectionText": "#14FF14",
+    "ansi": {
+      "black": "#0A0F0A",
+      "red": "#FF3333",
+      "green": "#14FF14",
+      "yellow": "#B3FF00",
+      "blue": "#00B300",
+      "magenta": "#33FF99",
+      "cyan": "#00FF66",
+      "white": "#14FF14",
+      "brightBlack": "#0D5F0D",
+      "brightRed": "#FF6666",
+      "brightGreen": "#66FF66",
+      "brightYellow": "#CCFF33",
+      "brightBlue": "#33CC33",
+      "brightMagenta": "#66FFBB",
+      "brightCyan": "#33FF99",
+      "brightWhite": "#AAFFAA"
+    }
+  }
+}

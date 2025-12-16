@@ -1,0 +1,31 @@
+{
+  "name": "Guardian",
+  "author": "ShellShade",
+  "description": "Cosmic space magic colors",
+  "colors": {
+    "background": "#0A0A14",
+    "foreground": "#C8D4E8",
+    "cursor": "#00BFFF",
+    "cursorText": "#0A0A14",
+    "selection": "#2A2A44",
+    "selectionText": "#FFFFFF",
+    "ansi": {
+      "black": "#0A0A14",
+      "red": "#FF4500",
+      "green": "#7CFC00",
+      "yellow": "#FFD700",
+      "blue": "#00BFFF",
+      "magenta": "#9932CC",
+      "cyan": "#00CED1",
+      "white": "#C8D4E8",
+      "brightBlack": "#4A4A64",
+      "brightRed": "#FF6347",
+      "brightGreen": "#ADFF2F",
+      "brightYellow": "#FFFF00",
+      "brightBlue": "#87CEEB",
+      "brightMagenta": "#DA70D6",
+      "brightCyan": "#40E0D0",
+      "brightWhite": "#FFFFFF"
+    }
+  }
+}

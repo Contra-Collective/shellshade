@@ -315,6 +315,15 @@ export async function setTerminalDefault(themeId: string): Promise<InstallResult
   }
 }
 
+// Sanitize hex color - ensure 6-char format (strip alpha if present)
+function sanitizeHexColor(hex: string): string {
+  // Remove # prefix if present
+  const color = hex.startsWith('#') ? hex.slice(1) : hex;
+  // If 8 chars (with alpha), take only first 6
+  const sanitized = color.length === 8 ? color.slice(0, 6) : color;
+  return `#${sanitized.toUpperCase()}`;
+}
+
 // Install to Windows Terminal
 export async function installToWindowsTerminal(themeId: string): Promise<InstallResult> {
   const colors = getThemeColors(themeId);
@@ -435,29 +444,29 @@ export async function installToWindowsTerminal(themeId: string): Promise<Install
       };
     }
 
-    // Build Windows Terminal color scheme
+    // Build Windows Terminal color scheme (sanitize all colors to prevent 8-char hex errors)
     const scheme = {
       name: themeName,
-      background: colors.background,
-      foreground: colors.foreground,
-      cursorColor: colors.cursor,
-      selectionBackground: colors.selection,
-      black: colors.ansi.black,
-      red: colors.ansi.red,
-      green: colors.ansi.green,
-      yellow: colors.ansi.yellow,
-      blue: colors.ansi.blue,
-      purple: colors.ansi.magenta,
-      cyan: colors.ansi.cyan,
-      white: colors.ansi.white,
-      brightBlack: colors.ansi.brightBlack,
-      brightRed: colors.ansi.brightRed,
-      brightGreen: colors.ansi.brightGreen,
-      brightYellow: colors.ansi.brightYellow,
-      brightBlue: colors.ansi.brightBlue,
-      brightPurple: colors.ansi.brightMagenta,
-      brightCyan: colors.ansi.brightCyan,
-      brightWhite: colors.ansi.brightWhite,
+      background: sanitizeHexColor(colors.background),
+      foreground: sanitizeHexColor(colors.foreground),
+      cursorColor: sanitizeHexColor(colors.cursor),
+      selectionBackground: sanitizeHexColor(colors.selection),
+      black: sanitizeHexColor(colors.ansi.black),
+      red: sanitizeHexColor(colors.ansi.red),
+      green: sanitizeHexColor(colors.ansi.green),
+      yellow: sanitizeHexColor(colors.ansi.yellow),
+      blue: sanitizeHexColor(colors.ansi.blue),
+      purple: sanitizeHexColor(colors.ansi.magenta),
+      cyan: sanitizeHexColor(colors.ansi.cyan),
+      white: sanitizeHexColor(colors.ansi.white),
+      brightBlack: sanitizeHexColor(colors.ansi.brightBlack),
+      brightRed: sanitizeHexColor(colors.ansi.brightRed),
+      brightGreen: sanitizeHexColor(colors.ansi.brightGreen),
+      brightYellow: sanitizeHexColor(colors.ansi.brightYellow),
+      brightBlue: sanitizeHexColor(colors.ansi.brightBlue),
+      brightPurple: sanitizeHexColor(colors.ansi.brightMagenta),
+      brightCyan: sanitizeHexColor(colors.ansi.brightCyan),
+      brightWhite: sanitizeHexColor(colors.ansi.brightWhite),
     };
 
     // Initialize schemes array if it doesn't exist
