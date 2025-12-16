@@ -22,7 +22,7 @@
 
 ## Features
 
-- **50+ Built-in Themes** — Dracula, Nord, Tokyo Night, Catppuccin, Gruvbox, One Dark, Rosé Pine, and many more
+- **70+ Built-in Themes** — Dracula, Nord, Tokyo Night, Catppuccin, Gruvbox, One Dark, Rosé Pine, and many more
 - **Cross-Platform** — Native support for macOS, Windows, and Linux
 - **Multi-Terminal Support** — One tool for all your terminals
 - **Auto-Detection** — Automatically detects which terminal you're running
@@ -123,15 +123,24 @@ The desktop app provides a visual interface for:
 
 ## Built-in Themes
 
-ShellShade comes with 50 carefully curated themes:
+ShellShade comes with 70+ carefully curated themes:
 
 **Dark Themes**
 - Catppuccin Mocha, Dracula, Nord, Tokyo Night, One Dark
-- Gruvbox Dark, Rosé Pine, Kanagawa, Moonlit, Nocturnal
+- Gruvbox Dark, Rosé Pine Moon, Kanagawa, Moonlit, Nocturnal
 - Deep Ocean, Ember Glow, Midnight Ember, Nebula, Neon Dreams
 - Pacific, Slack Ochin, Twilight, Monokai, Synthwave '84
 - Material Palenight, Night Owl, Shades of Purple, Cyberpunk, Ayu Dark
-- Everforest Dark, GitHub Dark
+- Everforest Dark, GitHub Dark, Miami Nights, Art Deco, Blocky
+- Emerald Forest, Inferno
+
+**Gaming Themes**
+- Aeternum (New World), Aperture (Portal), Azeroth (World of Warcraft)
+- Black Mesa (Half-Life), Lambda (Half-Life 2), Bronze Arena
+- Golden Order (Elden Ring), Guardian (Destiny), Hyrule (Zelda)
+- Machine Dawn, Monster Hunter, N7 Commander (Mass Effect)
+- Pip-Boy (Fallout), Spartan (Halo), Spartan Rage (God of War)
+- Wild West (Red Dead Redemption)
 
 **Light Themes**
 - Catppuccin Latte, One Light, Nord Light, Tokyo Night Light
@@ -139,6 +148,7 @@ ShellShade comes with 50 carefully curated themes:
 - Clean Slate, Clear Sky, Horizon Light, Light Owl, Min Light
 - PaperColor Light, Quiet Light, Sand Dune, Soft Morning
 - Solarized Light, Winter is Coming Light, Everforest Light, GitHub Light
+- Cali Sunset, Coastal Breeze
 
 ## How It Works
 
