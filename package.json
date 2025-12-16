@@ -1,6 +1,6 @@
 {
   "name": "@contra-collective/shellshade",
-  "version": "0.2.0",
+  "version": "0.2.5",
   "description": "Terminal theme manager for macOS, Windows, and Linux",
   "main": "dist/main/index.js",
   "bin": {

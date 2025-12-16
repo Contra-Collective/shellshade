@@ -22,7 +22,7 @@
 
 ## Features
 
-- **43+ Built-in Themes** — Dracula, Nord, Tokyo Night, Catppuccin, Gruvbox, One Dark, Rosé Pine, and many more
+- **50+ Built-in Themes** — Dracula, Nord, Tokyo Night, Catppuccin, Gruvbox, One Dark, Rosé Pine, and many more
 - **Cross-Platform** — Native support for macOS, Windows, and Linux
 - **Multi-Terminal Support** — One tool for all your terminals
 - **Auto-Detection** — Automatically detects which terminal you're running
@@ -45,17 +45,17 @@
 
 ```bash
 # Install globally via npm
-npm install -g shellshade
+npm install -g @contra-collective/shellshade
 
 # Or use npx without installing
-npx shellshade
+npx @contra-collective/shellshade
 ```
 
 ### From Source
 
 ```bash
 # Clone the repository
-git clone https://github.com/masecode67/shellshade.git
+git clone https://github.com/Contra-Collective/shellshade.git
 cd shellshade
 
 # Install dependencies
@@ -73,7 +73,7 @@ npm run dev
 
 ### Desktop App
 
-Download the latest release from the [Releases](https://github.com/masecode67/shellshade/releases) page.
+Download the latest release from the [Releases](https://github.com/Contra-Collective/shellshade/releases) page.
 
 ## Usage
 
@@ -123,20 +123,22 @@ The desktop app provides a visual interface for:
 
 ## Built-in Themes
 
-ShellShade comes with 43 carefully curated themes:
+ShellShade comes with 50 carefully curated themes:
 
 **Dark Themes**
 - Catppuccin Mocha, Dracula, Nord, Tokyo Night, One Dark
 - Gruvbox Dark, Rosé Pine, Kanagawa, Moonlit, Nocturnal
 - Deep Ocean, Ember Glow, Midnight Ember, Nebula, Neon Dreams
-- Pacific, Slack Ochin, Twilight, Winter is Coming
+- Pacific, Slack Ochin, Twilight, Monokai, Synthwave '84
+- Material Palenight, Night Owl, Shades of Purple, Cyberpunk, Ayu Dark
+- Everforest Dark, GitHub Dark
 
 **Light Themes**
 - Catppuccin Latte, One Light, Nord Light, Tokyo Night Light
 - Gruvbox Light, Rosé Pine Dawn, Atom One Light, Ayu Light
 - Clean Slate, Clear Sky, Horizon Light, Light Owl, Min Light
 - PaperColor Light, Quiet Light, Sand Dune, Soft Morning
-- Solarized Light, Winter is Coming Light
+- Solarized Light, Winter is Coming Light, Everforest Light, GitHub Light
 
 ## How It Works
 
@@ -165,7 +167,7 @@ shellshade/
 │   ├── preload/       # Electron preload scripts
 │   └── shared/        # Shared types and utilities
 ├── resources/
-│   ├── builtin-themes/  # 43 built-in theme files
+│   ├── builtin-themes/  # 50 built-in theme files
 │   └── icons/           # App icons
 └── dist/              # Built output
 ```
