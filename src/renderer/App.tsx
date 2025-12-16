@@ -22,18 +22,13 @@ const App: React.FC = () => {
   }, []);
 
   const loadPlatform = async () => {
-    console.log('[ShellShade] loadPlatform called');
     try {
-      if (window.api && window.api.system.getPlatform) {
-        console.log('[ShellShade] Calling system.getPlatform...');
+      if (window.api?.system.getPlatform) {
         const p = await window.api.system.getPlatform();
-        console.log('[ShellShade] Platform detected:', p);
         setPlatform(p);
-      } else {
-        console.error('[ShellShade] getPlatform not available on window.api.system');
       }
     } catch (err) {
-      console.error('[ShellShade] Failed to get platform:', err);
+      // Silently fall back to default platform
     }
   };
 
@@ -146,7 +141,6 @@ const App: React.FC = () => {
   };
 
   const handleApplyTheme = async (themeId: string, target: 'iterm2' | 'terminal' | 'terminal-default' | 'windows-terminal' | 'alacritty' | 'kitty' | 'auto') => {
-    console.log('[ShellShade] handleApplyTheme called with:', { themeId, target, platform });
     try {
       if (window.api) {
         let result;
@@ -154,7 +148,6 @@ const App: React.FC = () => {
         // Auto-detect: use platform default terminal
         let actualTarget = target;
         if (target === 'auto') {
-          console.log('[ShellShade] Auto-detecting terminal for platform:', platform);
           if (platform === 'win32') {
             actualTarget = 'windows-terminal';
           } else if (platform === 'darwin') {
@@ -163,7 +156,6 @@ const App: React.FC = () => {
             actualTarget = 'alacritty'; // Default for Linux
           }
         }
-        console.log('[ShellShade] Using target:', actualTarget);
 
         switch (actualTarget) {
           case 'iterm2':
@@ -194,7 +186,6 @@ const App: React.FC = () => {
         }
       }
     } catch (err) {
-      console.error('Apply theme failed:', err);
       alert(`Failed to apply theme: ${err}`);
     }
   };

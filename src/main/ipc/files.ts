@@ -63,11 +63,8 @@ export function registerFileHandlers(): void {
     }
 
     try {
-      console.log('Importing file:', targetPath);
-
       // Parse the theme file
       const parsed = parseThemeFile(targetPath);
-      console.log('Parsed theme:', parsed.name, parsed.colors.background);
 
       // Generate ID
       const id = uuidv4();
@@ -76,8 +73,6 @@ export function registerFileHandlers(): void {
       // Generate unique slug and name to avoid constraint violations
       const slug = generateUniqueSlug(db, parsed.name);
       const uniqueName = generateUniqueName(db, parsed.name, 'Imported');
-
-      console.log(`Using name: "${uniqueName}", slug: "${slug}"`);
 
       // Save to database
       db.prepare(`
@@ -144,13 +139,12 @@ export function registerFileHandlers(): void {
 
       return theme;
     } catch (err) {
-      console.error('Import failed:', err);
       throw new Error(`Failed to import theme: ${err instanceof Error ? err.message : String(err)}`);
     }
   });
 
   // Export theme to file
-  ipcMain.handle(IPC_CHANNELS.FILES_EXPORT, async (_, themeId: string, format: ThemeFormat, filePath?: string): Promise<string> => {
+  ipcMain.handle(IPC_CHANNELS.FILES_EXPORT, async (_, _themeId: string, format: ThemeFormat, filePath?: string): Promise<string> => {
     let targetPath = filePath;
 
     const extensionMap: Record<ThemeFormat, string> = {
@@ -182,7 +176,6 @@ export function registerFileHandlers(): void {
     }
 
     // TODO: Implement actual serialization with parser registry
-    console.log('Export requested:', { themeId, format, targetPath });
     throw new Error('Export not yet implemented. Coming soon!');
   });
 

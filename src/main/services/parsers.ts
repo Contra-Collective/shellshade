@@ -11,7 +11,6 @@ export interface ParsedTheme {
 // Parse iTerm2 .itermcolors (plist XML format)
 export function parseItermColors(filePath: string): ParsedTheme {
   const name = path.basename(filePath, '.itermcolors');
-  console.log('Parsing iTerm colors file:', filePath);
 
   // Convert plist to JSON using plutil (macOS built-in)
   const tempJsonPath = `/tmp/iterm-theme-${Date.now()}.json`;
@@ -21,10 +20,6 @@ export function parseItermColors(filePath: string): ParsedTheme {
       throw new Error(`File not found: ${filePath}`);
     }
 
-    const fileContent = fs.readFileSync(filePath, 'utf-8');
-    console.log('File size:', fileContent.length, 'bytes');
-    console.log('File starts with:', fileContent.substring(0, 100));
-
     // Try plutil conversion
     try {
       execSync(`plutil -convert json -o "${tempJsonPath}" "${filePath}"`, {
@@ -33,15 +28,12 @@ export function parseItermColors(filePath: string): ParsedTheme {
       });
     } catch (plutilErr: unknown) {
       const errMsg = plutilErr instanceof Error ? plutilErr.message : String(plutilErr);
-      console.error('plutil failed:', errMsg);
       throw new Error(`Failed to parse plist file. The file may be corrupted or in an unsupported format. Error: ${errMsg}`);
     }
 
     const jsonContent = fs.readFileSync(tempJsonPath, 'utf-8');
-    console.log('Converted JSON length:', jsonContent.length);
     const plist = JSON.parse(jsonContent);
     fs.unlinkSync(tempJsonPath);
-    console.log('Plist keys:', Object.keys(plist));
 
     const getColor = (key: string): string => {
       const colorDict = plist[key];
@@ -296,31 +288,20 @@ export function parseKitty(filePath: string): ParsedTheme {
 // Main parser function that auto-detects format
 export function parseThemeFile(filePath: string): ParsedTheme {
   const ext = path.extname(filePath).toLowerCase();
-  console.log('Parsing file with extension:', ext);
 
-  try {
-    switch (ext) {
-      case '.itermcolors':
-        console.log('Using iTerm parser');
-        return parseItermColors(filePath);
-      case '.terminal':
-        console.log('Using Terminal.app parser');
-        return parseTerminalApp(filePath);
-      case '.yaml':
-      case '.yml':
-        console.log('Using Alacritty parser');
-        return parseAlacritty(filePath);
-      case '.json':
-        console.log('Using JSON parser');
-        return parseJson(filePath);
-      case '.conf':
-        console.log('Using Kitty parser');
-        return parseKitty(filePath);
-      default:
-        throw new Error(`Unsupported file format: ${ext}`);
-    }
-  } catch (err) {
-    console.error('Parser error:', err);
-    throw err;
+  switch (ext) {
+    case '.itermcolors':
+      return parseItermColors(filePath);
+    case '.terminal':
+      return parseTerminalApp(filePath);
+    case '.yaml':
+    case '.yml':
+      return parseAlacritty(filePath);
+    case '.json':
+      return parseJson(filePath);
+    case '.conf':
+      return parseKitty(filePath);
+    default:
+      throw new Error(`Unsupported file format: ${ext}`);
   }
 }

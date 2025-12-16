@@ -98,8 +98,6 @@ export async function initDatabase(): Promise<void> {
   for (const migration of MIGRATIONS) {
     db.exec(migration);
   }
-
-  console.log(`Database initialized at: ${dbPath}`);
 }
 
 export function closeDatabase(): void {

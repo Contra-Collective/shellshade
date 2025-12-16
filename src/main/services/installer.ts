@@ -215,7 +215,6 @@ export async function installToTerminalApp(themeId: string): Promise<InstallResu
   try {
     // Create the profile first
     await execAsync(`osascript -e '${createProfileScript.replace(/'/g, "'\"'\"'")}'`);
-    console.log('Profile created successfully');
 
     // Step 2: Try to apply to open windows (separate try/catch so profile creation is not affected)
     let appliedToWindows = false;
@@ -234,25 +233,24 @@ export async function installToTerminalApp(themeId: string): Promise<InstallResu
       `;
       await execAsync(`osascript -e '${applyScript.replace(/'/g, "'\"'\"'")}'`);
       appliedToWindows = true;
-    } catch (applyErr) {
-      console.log('Could not apply to open windows (this is ok):', applyErr);
+    } catch {
+      // Could not apply to open windows - profile still created
     }
 
     if (appliedToWindows) {
       return {
         success: true,
         path: '',
-        instructions: `Theme "${themeName}" applied! Profile saved in Terminal → Settings → Profiles.`,
+        instructions: `Theme "${themeName}" applied! All open Terminal windows updated.`,
       };
     } else {
       return {
         success: true,
         path: '',
-        instructions: `Theme "${themeName}" saved to Terminal profiles. Select it in Terminal → Settings → Profiles, or close and reopen Terminal windows.`,
+        instructions: `Theme "${themeName}" saved to Terminal profiles. Select it in Terminal → Settings → Profiles, or open a new window.`,
       };
     }
   } catch (err) {
-    console.error('Terminal.app AppleScript error:', err);
     return {
       success: false,
       path: '',
@@ -319,15 +317,12 @@ export async function setTerminalDefault(themeId: string): Promise<InstallResult
 
 // Install to Windows Terminal
 export async function installToWindowsTerminal(themeId: string): Promise<InstallResult> {
-  console.log('[ShellShade] installToWindowsTerminal called with themeId:', themeId);
   const colors = getThemeColors(themeId);
   const themeName = getThemeName(themeId);
 
   if (!colors) {
-    console.log('[ShellShade] Theme not found:', themeId);
     return { success: false, path: '', error: 'Theme not found' };
   }
-  console.log('[ShellShade] Installing theme:', themeName);
 
   // Windows Terminal settings path
   const localAppData = process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local');
@@ -364,7 +359,6 @@ export async function installToWindowsTerminal(themeId: string): Promise<Install
   try {
     // Read existing settings
     const settingsContent = fs.readFileSync(actualSettingsPath, 'utf-8');
-    console.log('[ShellShade] Read settings file, length:', settingsContent.length);
 
     // Remove comments for JSON parsing (Windows Terminal uses JSONC)
     // We need to be careful not to remove // inside strings (like URLs)
@@ -433,10 +427,7 @@ export async function installToWindowsTerminal(themeId: string): Promise<Install
     let settings;
     try {
       settings = JSON.parse(jsonWithoutComments);
-      console.log('[ShellShade] Parsed settings successfully');
     } catch (parseErr) {
-      console.error('[ShellShade] JSON parse error:', parseErr);
-      console.error('[ShellShade] First 500 chars of processed content:', jsonWithoutComments.substring(0, 500));
       return {
         success: false,
         path: actualSettingsPath,
@@ -491,15 +482,13 @@ export async function installToWindowsTerminal(themeId: string): Promise<Install
 
     // Write back to settings file
     fs.writeFileSync(actualSettingsPath, JSON.stringify(settings, null, 4));
-    console.log('[ShellShade] Successfully wrote settings to:', actualSettingsPath);
 
     return {
       success: true,
       path: actualSettingsPath,
-      instructions: `Theme "${themeName}" applied to Windows Terminal! Open a new tab to see changes.`,
+      instructions: `Theme "${themeName}" applied to Windows Terminal! All open windows updated.`,
     };
   } catch (err) {
-    console.error('[ShellShade] Error in installToWindowsTerminal:', err);
     return {
       success: false,
       path: actualSettingsPath,

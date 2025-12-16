@@ -48,7 +48,6 @@ export async function loadBuiltinThemes(): Promise<number> {
   // Check if we already have builtin themes
   const existingCount = db.prepare('SELECT COUNT(*) as count FROM themes WHERE is_builtin = 1').get() as { count: number };
   if (existingCount.count > 0) {
-    console.log(`Builtin themes already loaded (${existingCount.count} themes)`);
     return existingCount.count;
   }
 
@@ -62,15 +61,11 @@ export async function loadBuiltinThemes(): Promise<number> {
     themesDir = path.join(__dirname, '../../..', 'resources/builtin-themes');
   }
 
-  console.log('Looking for builtin themes in:', themesDir);
-
   if (!fs.existsSync(themesDir)) {
-    console.warn('Builtin themes directory not found:', themesDir);
     return 0;
   }
 
   const files = fs.readdirSync(themesDir).filter(f => f.endsWith('.json'));
-  console.log(`Found ${files.length} theme files`);
 
   const insertTheme = db.prepare(`
     INSERT INTO themes (id, name, slug, description, author, created_at, updated_at, is_favorite, is_builtin)
@@ -123,15 +118,13 @@ export async function loadBuiltinThemes(): Promise<number> {
         }
 
         loadedCount++;
-        console.log(`Loaded theme: ${theme.name}`);
-      } catch (err) {
-        console.error(`Failed to load theme ${file}:`, err);
+      } catch {
+        // Skip invalid theme files
       }
     }
   });
 
   loadThemes();
 
-  console.log(`Loaded ${loadedCount} builtin themes`);
   return loadedCount;
 }

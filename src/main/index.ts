@@ -81,8 +81,8 @@ app.whenReady().then(async () => {
       if (!icon.isEmpty()) {
         app.dock.setIcon(icon);
       }
-    } catch (e) {
-      console.log('Could not set dock icon:', e);
+    } catch {
+      // Dock icon not critical, ignore errors
     }
   }
 

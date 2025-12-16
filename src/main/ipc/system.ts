@@ -41,9 +41,8 @@ export function registerSystemHandlers(): void {
       const allFonts = [...new Set([...monospaceFonts, ...fonts])];
 
       return allFonts.sort();
-    } catch (error) {
-      console.error('Failed to get system fonts:', error);
-      // Return fallback list
+    } catch {
+      // Return fallback list if font detection fails
       return [
         'SF Mono',
         'Monaco',
